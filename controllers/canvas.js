@@ -1,14 +1,29 @@
-// const wrapper = new El('#wrapper');
-// const cMain = new Canvas('#main');
-// const cOverlay = new Canvas('#overlay');
 
+var CANVAS_MAIN = (function() {
 
-// wrapper.on('mousedown', () => {
-//   wrapper.on('mousemove', controlBar.data.selectedBrush)
-// });
+  return new Component({
+    el: '#main',
+    createRef(selector) {
+      return new Canvas(selector);
+    },
+    events: {
+      canvas: {
+        mousedown(e, canvas, data, methods) {
+          canvas.on('mousemove', e => {
+            canvas.draw(ctx => {
+              CONTROL_BAR.data.selectedBrush(e, ctx);
+            })
+          })
+        },
+        mouseup(e, canvas) {
+          canvas.off('mousemove')
+        }
+      }
+    },
+    template(data) {
+      return '<canvas ref="canvas"></canvas>'
+    },
+  })
 
-
-// wrapper.on('mouseup', () => {
-//   wrapper.off('mousemove');
-// });
+})();
 
