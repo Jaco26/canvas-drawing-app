@@ -11,7 +11,7 @@ var CANVAS_MAIN = (function() {
         mousedown(e, canvas, data, methods) {
           canvas.on('mousemove', e => {
             canvas.draw(ctx => {
-              CONTROL_BAR.data.selectedBrush(e, ctx);
+              const paint = BRUSH_SELECT.data.selectedBrush(e, ctx);
             })
           })
         },

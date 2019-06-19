@@ -11,10 +11,12 @@
 <body>
 
   <div class="container">
-    <div class="row" id="control-bar"></div>
+    <div class="row" id="control-bar">
+      <div id="mode-select"></div>
+      <div id="brush-select"></div>
+    </div>
     <div class="row justify-center" id="wrapper">
       <div id="main" class="canvas-parent row justify-center"></div>
-      <!-- <canvas id="overlay"></canvas> -->
     </div>
   </div>
 
@@ -23,7 +25,8 @@
   <script src="models/canvas.js"></script>
   <script src="models/component.js"></script>
   <script src="controllers/canvas.js"></script>
-  <script src="controllers/control-bar.js"></script>
+  <script src="controllers/mode-select.js"></script>
+  <script src="controllers/brush-select.js"></script>
   
 
 </body>
