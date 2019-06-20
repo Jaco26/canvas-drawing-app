@@ -10,7 +10,7 @@ var MODE_SELECT = (function() {
     el: '#mode-select',
     data: {
       modes,
-      allowedModeIndexes: [0],
+      allowedModeIndexes: [0,1],
       selectedMode: modes[0],
     },
     events: {
