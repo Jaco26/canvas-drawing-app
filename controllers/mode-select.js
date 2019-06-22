@@ -1,26 +1,18 @@
 var MODE_SELECT = (function() {
 
-  function temFor(items, temStrFn) {
-    return items.reduce((acc, x, i) => (acc + temStrFn(x, i)), '')
-  }
 
-  const modes = ['dot', 'bezier', 'line', 'path2d']
 
   return new Component({
     el: '#mode-select',
-    data: {
-      modes,
-      allowedModeIndexes: [0,1],
-      selectedMode: modes[0],
-    },
     events: {
       modes: {
         change(e, ref, data) {
-          data.selectedMode = e.target.value
+          STORE.modeSelect.selectedMode = e.target.value
         }
       }
     },
-    template({ modes, allowedModeIndexes }) {
+    template(data, { temFor }) {
+      const { modes, allowedModeIndexes } = STORE.modeSelect
       return (`
         <label>Mode</label>
         <select ref="modes">

@@ -1,4 +1,4 @@
-const Component = (function() {
+const { Component } = (function() {
 
   let target = null
 
@@ -24,8 +24,17 @@ const Component = (function() {
     }
   }
 
+  const templateUtils = {
+    temFor(items, temStrFn) {
+      return items.reduce((acc, x, i) => (acc + temStrFn(x, i)), '')
+    },
+    temIf(condition, temStr) {
+      return condition ? temStr : '';
+    }
+  }
 
-  return class Component {
+
+  class Component {
     constructor({ el, template, data, events, methods, createRef }) {
       this.el = document.querySelector(el);
       this.data = this.wrapData(data);
@@ -102,7 +111,7 @@ const Component = (function() {
 
         Object.keys(this.events[refName]).forEach(evt => {
           this.refs[refName].on(evt, e => {
-            this.events[refName][evt](e, this.refs[refName], this.data, this.methods)
+            this.events[refName][evt](e, this.refs[refName], this.data, this.store, this.methods)
           })
         })
       })
@@ -111,13 +120,15 @@ const Component = (function() {
     render() {
       if (this.template) {
         watcher(() => {
-          this.el.innerHTML = this.compileTemplate(this.template(this.data))
+          this.el.innerHTML = this.compileTemplate(this.template(this.data, templateUtils, this.store))
         });
         this.applyEventListeners();
       }
     }
 
   }
+
+  return { Component }
 
 })();
 

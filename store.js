@@ -47,6 +47,11 @@ const STORE = (function() {
       brushes: {
         list: brushList,
         selectedBrush: brushList[0].handler
+      },
+      modeSelect: {
+        modes: ['dot', 'bezier', 'line', 'path2d'],
+        selectedMode: 'dot',
+        allowedModeIndexes: [0, 1],
       }
     }
   }).data;
