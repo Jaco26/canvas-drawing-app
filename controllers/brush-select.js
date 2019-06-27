@@ -14,12 +14,9 @@ var BRUSH_SELECT = (function() {
     template(data, { temFor }) {
       return (`
         <label>Brush:</label>
-        ${STORE.modeSelect.selectedMode}
         <select ref="brushes">
           ${temFor(STORE.brushes.list, x => (
-            x.handler === STORE.brushes.selectedBrush
-              ? `<option value="${x.name}" selected>${x.name}</option>`
-              : `<option value="${x.name}">${x.name}</option>`
+            `<option value="${x.name}">${x.name}</option>`
           ))}
         </select>
       `)

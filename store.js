@@ -50,8 +50,7 @@ const STORE = (function() {
       },
       modeSelect: {
         modes: ['dot', 'bezier', 'line', 'path2d'],
-        selectedMode: 'dot',
-        allowedModeIndexes: [0, 1],
+        allowedModeIndexes: [0, 2],
       }
     }
   }).data;

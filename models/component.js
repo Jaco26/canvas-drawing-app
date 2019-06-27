@@ -120,7 +120,7 @@ const { Component } = (function() {
     render() {
       if (this.template) {
         watcher(() => {
-          this.el.innerHTML = this.compileTemplate(this.template(this.data, templateUtils, this.store))
+          this.el.innerHTML = this.compileTemplate(this.template(this.data, templateUtils))
         });
         this.applyEventListeners();
       }
