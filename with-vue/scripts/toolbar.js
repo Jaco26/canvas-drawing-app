@@ -4,22 +4,16 @@ const TheToolbar = {
     brushOptions: Array,
     selectedBrush: Object,
   },
-  methods: {
-    selectBrush: function(event, other) {
-      console.log(event, other)
-    },
-  },
-  template: `
-  <div class="navbar navbar-expand-lg navbar-light bg-light">
+  template: //html
+  `<div class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="navbar-text">Hello</div>
-      <select 
-        :value="selectedBrush"
-        @input="selectBrush($event)"
-      >
+      <component :is="selectedBrush.component"></component>
+      <select v-model="selectedBrush">
         <option 
           v-for="(opt, i) in brushOptions" 
           :key="i"
           :value="opt"
+          :selected="opt.text === selectedBrush.text"
         >
           {{opt.text}}
         </option>

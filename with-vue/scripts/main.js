@@ -13,8 +13,8 @@ const app = new Vue({
     ],
     selectedBrush: { text: 'Default', component: DefaultBrush },
   },
-  template: `
-  <div class="container-fluid">
+  template: //html
+  `<div class="container-fluid">
     <div class="row">
       <div class="col-12">
         <the-toolbar 
@@ -25,7 +25,9 @@ const app = new Vue({
     </div>
     <div class="row">
       <div class="col-12">
-        <the-canvas></the-canvas>
+        <the-canvas>
+          <component :is="selectedBrush.component"></component>
+        </the-canvas>
       </div>
     </div>
   </div>`

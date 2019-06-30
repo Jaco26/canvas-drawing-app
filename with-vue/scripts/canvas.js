@@ -7,6 +7,11 @@ const TheCanvas = {
       mouseIsDown: false,
     }
   },
+  provide: function() {
+    return {
+      draw: this.draw,
+    }
+  },
   methods: {
     /** @param {function(CanvasRenderingContext2D)} callback */
     draw: function(callback) {
@@ -28,12 +33,15 @@ const TheCanvas = {
     canvas.height = 600;
     this.ctx = canvas.getContext('2d');
   },
-  template: `
-  <canvas
-    ref="theCanvas"
-    id="the-canvas"
-    @mousedown="mouseIsDown = true"
-    @mouseup="mouseIsDown = false"
-    v-on="mouseIsDown ? {mousemove: onMouseMove} : {}"
-  ></canvas>`
+  template: //html 
+  `<div>
+    <canvas
+      ref="theCanvas"
+      id="the-canvas"
+      @mousedown="mouseIsDown = true"
+      @mouseup="mouseIsDown = false"
+      v-on="mouseIsDown ? {mousemove: onMouseMove} : {}"
+    ></canvas>
+    <slot></slot>
+  </div>`
 }
