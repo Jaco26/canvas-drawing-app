@@ -1,62 +1,64 @@
 
-/**
-  * 
-  * @typedef Brush
-  * @property {object} data
-  * @property {function()} init
-  * @property {function(MouseEvent)} onMousedown
-  * @property {function(MouseEvent)} onMousemove
-  * @property {function(MouseEvent)} onMouseup
-*/
-
-/** @param {Brush} handlers */
-function createBrush(handlers) {
-  return handlers;
-}
-
-function initCanvas({ height, width, style }) {
-
-  /** @type {HTMLCanvasElement} */
-  const canvas = document.querySelector('#canvas');
-  canvas.width = width;
-  canvas.height = height;
-  Object.keys(style).forEach(key => {
-    canvas.style[key] = style[key];
-  });
-
-  /** @type {CanvasRenderingContext2D} */
-  const ctx = canvas.getContext('2d');
-
-  /** @param {function(CanvasRenderingContext2D)} callback  */
-  function draw(callback) {
-    ctx.beginPath();
-    callback(ctx);
-    ctx.closePath();
-  }
-
-  const LISTENERS = {
-    mousedown: null,
-    mousemove: null,
-    mouseup: null,
-  };
-
-  /**
-   * 
-   * @param {string} type 
-   * @param {function(MouseEvent)} listener 
-   */
-  function on(type, listener) {
-    if (LISTENERS[type]) canvas.removeEventListener(type, LISTENERS[type]);
-    LISTENERS[type] = listener;
-    canvas.addEventListener(type, LISTENERS[type]);
-  }
-
-  /** @param {string} type */
-  function off(type) {
-    canvas.removeEventListener(type, LISTENERS[type]);
-    LISTENERS[type] = null;
-  }
+const { draw, on, off, createBrush } = initCanvas({ 
+  height: 700, 
+  width: 700, 
+  style: {
+    border: '1px solid #999',
+    backgroundColor: '#dfdfdf'
+  },
+});
 
 
-  return { draw, on, off };
-}
+const brushes = {
+  default: createBrush({
+    ...defaultConfig,
+    onMousemove(e) {
+      draw(ctx => {
+        ctx.fillStyle = '#333'
+        ctx.fillRect(e.offsetX, e.offsetY, 5, 5)
+      })
+    },
+  }),
+  mirror: createBrush({
+    ...defaultConfig,
+
+    onMousemove(e) {
+      draw(ctx => {
+        ctx.fillStyle = '#333'
+        ctx.fillRect(e.offsetY, e.offsetX, 5, 5)
+        ctx.fillRect(e.offsetX, e.offsetY, 5, 5)
+      })
+    }
+  }),
+
+
+  rainbow: createBrush({
+    ...defaultConfig,
+    data: {
+      colors: ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'],
+      colorI: 0,
+      skipCycle: 0,
+      incrSkip() {
+        if (this.skipCycle + 1 < 3) this.skipCycle++;
+        else this.skipCycle = 0;
+      }
+    },
+    onMousemove(e) {
+      this.data.incrSkip();
+      if (this.data.skipCycle === 1) {
+        const { colors, colorI } = this.data;
+        const color = colors[colorI];
+        draw(ctx => {
+          ctx.fillStyle = color;
+          ctx.fillRect(e.offsetX, e.offsetY, 20, 10)
+        });
+        if (this.data.colorI < this.data.colors.length - 1)
+          this.data.colorI += 1;
+        else 
+          this.data.colorI = 0;
+      }
+    }
+  }),
+};
+
+brushes.default.init();
