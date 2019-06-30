@@ -2,6 +2,7 @@
 /**
   * 
   * @typedef Brush
+  * @property {object} data
   * @property {function()} init
   * @property {function(MouseEvent)} onMousedown
   * @property {function(MouseEvent)} onMousemove
@@ -17,8 +18,8 @@ function initCanvas({ height, width, style }) {
 
   /** @type {HTMLCanvasElement} */
   const canvas = document.querySelector('#canvas');
-  canvas.width = height;
-  canvas.height = width;
+  canvas.width = width;
+  canvas.height = height;
   Object.keys(style).forEach(key => {
     canvas.style[key] = style[key];
   });
