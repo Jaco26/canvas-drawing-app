@@ -19,9 +19,9 @@ const brushes = {
       })
     },
   }),
+
   mirror: createBrush({
     ...defaultConfig,
-
     onMousemove(e) {
       draw(ctx => {
         ctx.fillStyle = '#333'
@@ -30,7 +30,6 @@ const brushes = {
       })
     }
   }),
-
 
   rainbow: createBrush({
     ...defaultConfig,
