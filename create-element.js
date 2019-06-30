@@ -19,14 +19,22 @@ const ThanksBeToVue = (function() {
    */
   function createElement(tagName, data, children) {
     /** @type {Data} */
-    let _data;
+    let _data = null;
     /** @type {Node | Node[]} */
-    let _children;
+    let _children = null;
 
-    if (children) {
+    // if (children) {
+    //   _data = data;
+    //   _children = children;
+    // } else {
+    //   _data = null;
+    //   _children = data;
+    // }
+
+    if (Array.isArray(children) && data && typeof data === 'object') {
       _data = data;
       _children = children;
-    } else {
+    } else if (Array.isArray(data)) {
       _data = null;
       _children = data;
     }
@@ -58,9 +66,11 @@ const ThanksBeToVue = (function() {
       }
     }
     
-    _children.forEach(child => {
-      el.append(child);
-    });
+    if (_children) {
+      _children.forEach(child => {
+        el.append(child);
+      }); 
+    }
     return el;
   }
 
