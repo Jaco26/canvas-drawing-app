@@ -1,5 +1,5 @@
 
-const { draw, on, off, createBrush } = initCanvas({ 
+const { draw, on, off, createBrush, getCanvasImage } = initCanvas({ 
   height: 700, 
   width: 700, 
   style: {

@@ -12,6 +12,10 @@ function initCanvas({ height, width, style }) {
   /** @type {CanvasRenderingContext2D} */
   const ctx = canvas.getContext('2d');
 
+  function getCanvasImage() {
+    return canvas.toDataURL('image/png');
+  }
+
   /** @param {function(CanvasRenderingContext2D)} callback  */
   function draw(callback) {
     ctx.beginPath();
@@ -58,7 +62,7 @@ function initCanvas({ height, width, style }) {
     return handlers;
   }
 
-  return { draw, on, off, createBrush };
+  return { draw, on, off, createBrush, getCanvasImage };
 }
 
 const defaultConfig = {

@@ -23,14 +23,6 @@ const ThanksBeToVue = (function() {
     /** @type {Node | Node[]} */
     let _children = null;
 
-    // if (children) {
-    //   _data = data;
-    //   _children = children;
-    // } else {
-    //   _data = null;
-    //   _children = data;
-    // }
-
     if (Array.isArray(children) && data && typeof data === 'object') {
       _data = data;
       _children = children;

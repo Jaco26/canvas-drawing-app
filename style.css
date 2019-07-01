@@ -1,0 +1,13 @@
+.mx-1 {
+  margin: 0 0.33rem;
+}
+.mx-2 {
+  margin: 0 0.66rem;
+}
+.mx-3 {
+  margin: 0 1rem;
+}
+
+button:hover {
+  cursor: pointer;
+}
