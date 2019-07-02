@@ -1,5 +1,18 @@
+  /**
+  * 
+  * @typedef Brush
+  * @property {object} data
+  * @property {function()} init
+  * @property {function(MouseEvent)} onMousedown
+  * @property {function(MouseEvent)} onMousemove
+  * @property {function(MouseEvent)} onMouseup
+  */  
+
+
 
 function initCanvas({ height, width, style }) {
+
+  const listeners = {};
 
   /** @type {HTMLCanvasElement} */
   const canvas = document.querySelector('#canvas');
@@ -12,57 +25,47 @@ function initCanvas({ height, width, style }) {
   /** @type {CanvasRenderingContext2D} */
   const ctx = canvas.getContext('2d');
 
-  function getCanvasImage() {
-    return canvas.toDataURL('image/png');
+
+
+
+  const public = {
+    /** @param {function(CanvasRenderingContext2D)} callback  */
+    draw: function(callback) {
+      ctx.beginPath();
+      callback(ctx);
+      ctx.closePath();  
+    },
+
+    /**
+     * 
+     * @param {string} type 
+     * @param {function(MouseEvent)} listener 
+    */
+    on: function(type, listener) {
+      if (listeners[type]) canvas.removeEventListener(type, listeners[type]);
+      listeners[type] = listener;
+      canvas.addEventListener(type, listeners[type]);
+    },
+
+    /** @param {string} type */
+    off: function(type) {
+      canvas.removeEventListener(type, listeners[type]);
+      listeners[type] = null;
+    },
+
+    /** @param {Brush} handlers */
+    createBrush: function(handlers) {
+      return handlers;
+    },
+
+
+    getCanvasImage: function() {
+      return canvas.toDataURL('image/png');
+    }
+
   }
 
-  /** @param {function(CanvasRenderingContext2D)} callback  */
-  function draw(callback) {
-    ctx.beginPath();
-    callback(ctx);
-    ctx.closePath();
-  }
-
-  const LISTENERS = {
-    mousedown: null,
-    mousemove: null,
-    mouseup: null,
-  };
-
-  /**
-   * 
-   * @param {string} type 
-   * @param {function(MouseEvent)} listener 
-   */
-  function on(type, listener) {
-    if (LISTENERS[type]) canvas.removeEventListener(type, LISTENERS[type]);
-    LISTENERS[type] = listener;
-    canvas.addEventListener(type, LISTENERS[type]);
-  }
-
-  /** @param {string} type */
-  function off(type) {
-    canvas.removeEventListener(type, LISTENERS[type]);
-    LISTENERS[type] = null;
-  }
-
-  /**
-  * 
-  * @typedef Brush
-  * @property {object} data
-  * @property {function()} init
-  * @property {function(MouseEvent)} onMousedown
-  * @property {function(MouseEvent)} onMousemove
-  * @property {function(MouseEvent)} onMouseup
-  */  
-
-
-  /** @param {Brush} handlers */
-  function createBrush(handlers) {
-    return handlers;
-  }
-
-  return { draw, on, off, createBrush, getCanvasImage };
+  return public;
 }
 
 const defaultConfig = {
