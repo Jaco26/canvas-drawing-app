@@ -58,6 +58,10 @@ function initCanvas({ height, width, style }) {
       return handlers;
     },
 
+    /** @param {{onMousemove: () => string}} */
+    createBrushV2({ onMousemove }) {
+      
+    },
 
     getCanvasImage: function() {
       return canvas.toDataURL('image/png');
@@ -68,6 +72,8 @@ function initCanvas({ height, width, style }) {
   return public;
 }
 
+
+/** @type {Brush} */
 const defaultConfig = {
   init() {
     on('mousedown', () => this.onMousedown());
@@ -77,6 +83,7 @@ const defaultConfig = {
     console.log('You must provide your own implementation of onMousemove');
   },
   onMousedown() {
+
     on('mousemove', e => this.onMousemove(e));
   },
   onMouseup() {

@@ -29,6 +29,9 @@ const ThanksBeToVue = (function() {
     } else if (Array.isArray(data)) {
       _data = null;
       _children = data;
+    } else {
+      _children = null;
+      _data = data;
     }
 
     const el = document.createElement(tagName);
@@ -78,6 +81,6 @@ const ThanksBeToVue = (function() {
     return parent.appendChild(child);
   }
 
-  return { render };
+  return { render, createElement };
 
 })();
