@@ -6,6 +6,7 @@ const brushes = {
       fillStyle: '#999',
       strokeStyle: '#333',
     },
+    drawFunc: e => (['rect', [e.offsetX, e.offsetY, 30, 30]]),
     drawOptions: {
       fill: false,
       stroke: true,
@@ -16,8 +17,41 @@ const brushes = {
       fillStyle: 'orange',
       strokeStyle: 'blue',
     },
-    drawFunc: (e) => ([
-      ['rect'], []
+    drawFunc: e => (['rect', [e.offsetX, e.offsetY, 30, 30]]),
+    drawOptions: {
+      fill: true,
+      stroke: true,
+    }
+  },
+  mirror: {
+    ctxConfig: {
+      fillStyle: '#999',
+      strokeStyle: '#333',
+    },
+    drawFunc: e => ([
+      { func: 'rect', args: [e.offsetX, e.offsetY, 5, 5]},
+      { func: 'rect', args: [e.offsetY, e.offsetX, 5, 5]},
+    ]),
+    drawOptions: {
+      fill: true,
+      stroke: true,
+    }
+  },
+  weird: {
+    ctxConfig: {
+      fillStyle: '#6694',
+      strokeStyle: 'lime',
+    },
+    drawFunc: e => ([
+      {
+        func: 'rect',
+        args: [
+          e.offsetX / 1.5,
+          e.offsetY * 1.5,
+          5,
+          5
+        ],
+      }
     ]),
     drawOptions: {
       fill: true,
@@ -78,20 +112,15 @@ ThanksBeToVue.render('#toolbar', c => {
 
 canvas.on('mousedown', () => {
   canvas.createPath(selectedBrush)
+
   Object.entries(canvas.currentPath.ctxConfig).forEach(([key, value]) => {
     canvas.ctx[key] = value;
   });
   
   canvas.on('mousemove', e => {
-    canvas.draw(() => ({
-      rect: [e.offsetX, e.offsetY, 20, 20],
-    }))
-  })
-  // canvas.on('mousemove', e => {
-  //   canvas.draw(path => {
-  //     path.rect(e.offsetX, e.offsetY, 20, 20);
-  //   })
-  // });
+    canvas.draw(() => selectedBrush.drawFunc(e))
+  });
+
 });
 
 canvas.on('mouseup', () => {

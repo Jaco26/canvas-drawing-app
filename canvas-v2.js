@@ -58,23 +58,31 @@ const canvasManager = (function() {
       this.listeners[type] = null;
     }
 
-    // /** @param {function(Path2D)} callback */
-    // draw(callback) {
-    //   const { drawOptions, path } = this.currentPath;
-    //   callback(path)
-    //   if (drawOptions.fill) this.ctx.fill(path);
-    //   if (drawOptions.stroke) this.ctx.stroke(path);
-    // }
     /** @param {function() => Object<string, any[]>} callback */
     draw(callback) {
       const { drawOptions, path } = this.currentPath;
       const config = callback();
-      Object.keys(config).forEach(key => {
-        path[key](...config[key]);
-        this.ctx[key](...config[key]);
-      });
-      if (drawOptions.fill) this.ctx.fill(path);
-      if (drawOptions.stroke) this.ctx.stroke(path);
+      this.ctx.beginPath();
+      if (Array.isArray(config)) {
+        if (typeof config[0] === 'string') {
+          const [func, args] = config;
+          path[func](...args);
+          this.ctx[func](...args);
+        } else {
+          config.forEach(item => {
+            path[item.func](...item.args);
+            this.ctx[item.func](...item.args);
+          });
+        }
+      } else if (config && typeof config === 'object') {
+        Object.keys(config).forEach(key => {
+          path[key](...config[key]);
+          this.ctx[key](...config[key]);
+        })
+      }
+      if (drawOptions.fill) this.ctx.fill();
+      if (drawOptions.stroke) this.ctx.stroke();
+      this.ctx.closePath();
     }
 
     /**
