@@ -36,18 +36,11 @@ const brushes = {
     drawOptions: { fill: true },
   }),
 
-  'Orange and blue': {
-    ctxConfig: {
-      fillStyle: 'orange',
-      strokeStyle: 'blue',
-      filter: 'opacity(50%)'
-    },
+  'Orange and Blue': new Brush({
+    ctxConfig: { fillStyle: '#e948', strokeStyle: 'blue' },
     drawFunc: e => ({ func: 'rect', args: [e.offsetX, e.offsetY, 30, 30] }),
-    drawOptions: {
-      fill: true,
-      stroke: true,
-    }
-  },
+    drawOptions: { fill: true, stroke: true }
+  }),
 
   mirror: {
     ctxConfig: {
