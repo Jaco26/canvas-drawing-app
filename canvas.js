@@ -89,9 +89,10 @@ const canvasManager = (function() {
           });
         }
       } else if (config && typeof config === 'object') {
-        Object.keys(config).forEach(key => {
-          newDirectives.push(new Directive(key, config[key]))
-        })
+        newDirectives.push(new Directive(config.func, config.args))
+        // Object.keys(config).forEach(key => {
+        //   newDirectives.push(new Directive(key, config[key]))
+        // })
       }
       
       this.render(newDirectives, drawOptions);
