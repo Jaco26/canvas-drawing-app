@@ -45,12 +45,7 @@ const brushes = {
     drawFunc: e => ([
       {
         func: 'rect',
-        args: [
-          e.offsetX / 1.5,
-          e.offsetY * 1.5,
-          5,
-          5
-        ],
+        args: [e.offsetX / 1.5, e.offsetY * 1.5, 5, 5],
       }
     ]),
     drawOptions: {

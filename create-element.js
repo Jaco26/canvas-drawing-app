@@ -1,3 +1,7 @@
+const DEBUG = false
+
+const debugLog = (...args) => DEBUG ? console.log(...args) : null;
+
 const ThanksBeToVue = (function() {
 
   /**

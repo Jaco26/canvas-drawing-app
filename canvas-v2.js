@@ -1,5 +1,17 @@
 const canvasManager = (function() {
 
+  class Directive {
+    /**
+     * 
+     * @param {string} func the name of a function to be executed by a `CanvasRenderingContext2D`
+     * @param {Array<string | number>} args the arguments to pass to that function
+     */
+    constructor(func, args) {
+      this.func = func;
+      this.args = args;
+    }
+  }
+
 
   class Path {
     /** 
@@ -8,10 +20,13 @@ const canvasManager = (function() {
     */
     constructor(ctxConfig, drawOptions) {
       this.path = new Path2D();
+      /** @type {Directive[]} */
+      this.directives = [];
       this.ctxConfig = ctxConfig;
       this.drawOptions = drawOptions;
     }
   }
+
 
   class Canvas {
     constructor(selector) {
@@ -62,27 +77,35 @@ const canvasManager = (function() {
     draw(callback) {
       const { drawOptions, path } = this.currentPath;
       const config = callback();
-      this.ctx.beginPath();
+      /** @type {Directive[]} */
+      const newDirectives = [];
       if (Array.isArray(config)) {
         if (typeof config[0] === 'string') {
           const [func, args] = config;
-          path[func](...args);
-          this.ctx[func](...args);
+          newDirectives.push(new Directive(func, args));
         } else {
           config.forEach(item => {
-            path[item.func](...item.args);
-            this.ctx[item.func](...item.args);
+            newDirectives.push(new Directive(item.func, item.args))
           });
         }
       } else if (config && typeof config === 'object') {
         Object.keys(config).forEach(key => {
-          path[key](...config[key]);
-          this.ctx[key](...config[key]);
+          newDirectives.push(new Directive(key, config[key]))
         })
       }
-      if (drawOptions.fill) this.ctx.fill();
-      if (drawOptions.stroke) this.ctx.stroke();
-      this.ctx.closePath();
+      
+      this.render(newDirectives, drawOptions);
+      this.currentPath.directives.push(...newDirectives);
+    }
+
+    render(directives, drawOptions) {
+      directives.forEach(directive => {
+        this.ctx.beginPath();
+        this.ctx[directive.func](...directive.args);
+        if (drawOptions.fill) this.ctx.fill();
+        if (drawOptions.stroke) this.ctx.stroke();
+        this.ctx.closePath();
+      });
     }
 
     /**
@@ -105,14 +128,14 @@ const canvasManager = (function() {
     }
 
     drawHistory() {
+      const start = Date.now();
       this.history.forEach(p => {
         Object.keys(p.ctxConfig).forEach(key => {
           this.ctx[key] = p.ctxConfig[key];
         });
-        if (p.drawOptions.fill) this.ctx.fill(p.path);
-        if (p.drawOptions.stroke) this.ctx.stroke(p.path);
-      })
-
+        this.render(p.directives, p.drawOptions);
+      });
+      debugLog(`duration: ${Date.now() - start} milliseconds`)
     }
   }
 
