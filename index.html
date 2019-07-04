@@ -9,14 +9,16 @@
 </head>
 <body>
 
-  <section id="toolbar"></section>
-
-  <main style="display: flex; justify-content: center; ">
-    <section id="sidebar"></section>
-    <canvas id="canvas"></canvas>
-  </main>
+  <div class="flex center">
+    <div style="width: auto">
+      <section id="toolbar" class="card"></section>
+      <main class="flex">
+        <section id="sidebar" class="card"></section>
+        <canvas id="canvas" class="card"></canvas>
+      </main>
+    </div>
+  </div>
   
-
   <script src="create-element.js"></script>
   <script src="canvas.js"></script>
   <script src="brush-config.js"></script>

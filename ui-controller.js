@@ -4,9 +4,7 @@ let selectedBrush = brushes.default;
 const canvas = new canvasManager.Canvas('#canvas');
 canvas.width = 700;
 canvas.height = 700;
-canvas.style = {
-  border: '1px solid black'
-}
+
 
 canvas.on('mousedown', mdE => {
   canvas.createPath(selectedBrush);
@@ -65,9 +63,7 @@ function renderToolbar() {
           )
         ]
       ) 
-    ))
-    
-    
+    ));
   });
 }
 
@@ -77,10 +73,9 @@ function renderSidebar() {
   render('#sidebar', c => {
     return renderCard(c => (
       c('div',
-        { 
+        {
           style: { 
             width: '300px',
-            height: '100%',
           } 
         }, 
         [
@@ -93,4 +88,4 @@ function renderSidebar() {
 
 
 renderToolbar();
-// renderSidebar();
+renderSidebar();

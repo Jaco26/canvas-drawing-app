@@ -93,13 +93,7 @@ const ThanksBeToVue = (function() {
 function renderCard(callback) {
   return createElement('div',
     {
-      style: {
-        backgroundColor: '#fbfbfb',
-        boxShadow: '1px 1px 2px',
-        border: '1px solid #bbb',
-        margin: '0.35rem',
-        padding: '0.35rem',
-      }
+      style: { padding: '0.5rem' },
     },
     [
       callback(createElement)

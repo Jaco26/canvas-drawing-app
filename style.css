@@ -4,6 +4,10 @@ html, body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 .mx-1 {
   margin: 0 0.33rem;
 }
@@ -13,7 +17,23 @@ html, body {
 .mx-3 {
   margin: 0 1rem;
 }
+.flex {
+  display: flex;
+  width: auto;
+}
+.center {
+  justify-content: center;
+}
+.left {
+  justify-content: flex-start;
+}
+.right {
+  justify-content: flex-end;
+}
 
-button:hover {
-  cursor: pointer;
+.card {
+  background-color: #fbfbfb;
+  box-shadow: .2px .2px 2px;
+  border: .1px solid #ddd;
+  margin: 0.35rem;
 }
