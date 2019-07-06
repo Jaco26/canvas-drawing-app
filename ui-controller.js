@@ -1,100 +1,19 @@
 
-let selectedBrush = brushes.default;
-
-let brushVariants = [
-  { 
-    text: 'Rectangle',
-    drawFunc: (e, config) => {
-      const width = config.brushSize * config.xModifier;
-      const height = config.brushSize * config.yModifier;
-      return {
-        func: 'rect',
-        args: [
-          e.offsetX - (width / 2),
-          e.offsetY - (height / 2),
-          width,
-          height,
-        ]
-      }
-    },
-  },
-  {
-    text: 'Arc',
-    drawFunc: (e, config) => ({
-      func: 'arc',
-      args: [
-        e.offsetX,
-        e.offsetY,
-        config.brushSize * config.rModifier,
-        0,
-        Math.PI * 2
-      ]
-    })
-  },
-];
-
-
-function createBrushConfig(config) {
-  return Object.keys(config).reduce((acc, key) => {
-    let internalValue = config[key];
-    Object.defineProperty(acc, key, {
-      get: () => internalValue,
-      set: newVal => {
-        internalValue = newVal;
-        updateBrush();
-      }
-    });
-    return acc;
-  }, {});
-}
-
-const config = createBrushConfig({
-  brushSize: 5,
-  xModifier: 1,
-  yModifier: 1,
-  rModifier: 1,
-  fillStyle: '',
-  strokeStyle: '',
-  shouldFill: true,
-  shouldStroke: true,
-  brushVariant: brushVariants[0],
-});
-
-const brushSizeLabelDisplay = () => `Brush size: ${config.brushSize} `;
-
-
-const brush = new Brush();
-
-function updateBrush() {
-  brush.drawFunc = config.brushVariant.drawFunc;
-  brush.ctxConfig = {
-    fillStyle: config.fillStyle,
-    strokeStyle: config.strokeStyle,
-  },
-  brush.drawOptions = {
-    fill: config.shouldFill,
-    stroke: config.shouldStroke,
-  }
-}
-
-updateBrush();
-
 const canvas = new canvasManager.Canvas('#canvas');
 canvas.width = 700;
 canvas.height = 700;
 
 canvas.on('mousedown', mdE => {
+  
   canvas.createPath(brush);
 
   Object.entries(canvas.currentPath.ctxConfig).forEach(([key, value]) => {
     canvas.ctx[key] = value;
   });
 
-  // canvas.draw(() => selectedBrush.drawFunc(mdE, brushSize));
   canvas.draw(() => brush.drawFunc(mdE, config));
 
   canvas.on('mousemove', mmE => {
-    // canvas.draw(() => selectedBrush.drawFunc(mmE, brushSize));
     canvas.draw(() => brush.drawFunc(mmE, config));
   });
 });
@@ -162,7 +81,7 @@ function renderSidebar() {
           c('label', ['Fill Style: ']),
           c('input',
             { 
-              attrs: { type: 'color', value: '#fff' }, 
+              attrs: { type: 'color', value: '#ffffff' }, 
               on: { input: e => config.fillStyle = e.target.value }
             }
           ),
@@ -170,7 +89,7 @@ function renderSidebar() {
           c('label', ['Stroke Style: ']),
           c('input',
             {
-              attrs: { type: 'color', value: '#fff' }, 
+              attrs: { type: 'color' }, 
               on: { input: e => config.strokeStyle = e.target.value }
             }
           ),
