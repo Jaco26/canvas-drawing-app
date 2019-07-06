@@ -25,20 +25,20 @@ class Brush {
 const brushes = {
   default: new Brush({
     ctxConfig: { fillStyle: '#999', strokeStyle: '#333' },
-    drawFunc: e => ({ func: 'rect', args: [e.offsetX, e.offsetY, 10, 10] }),
+    drawFunc: (e, brushSize) => ({ func: 'rect', args: [e.offsetX, e.offsetY, brushSize * 2, brushSize * 2] }),
     drawOptions: { stroke: true },
   }),
 
 
   Circle: new Brush({
     ctxConfig: { fillStyle: '#5555ff77'  },
-    drawFunc: e => ({ func: 'arc', args: [e.offsetX, e.offsetY, 10, 0, Math.PI * 2]}),
+    drawFunc: (e, brushSize) => ({ func: 'arc', args: [e.offsetX, e.offsetY, brushSize, 0, Math.PI * 2]}),
     drawOptions: { fill: true },
   }),
 
   'Orange and Blue': new Brush({
     ctxConfig: { fillStyle: '#e948', strokeStyle: 'blue' },
-    drawFunc: e => ({ func: 'rect', args: [e.offsetX, e.offsetY, 30, 30] }),
+    drawFunc: (e, brushSize) => ({ func: 'rect', args: [e.offsetX, e.offsetY, brushSize * 2, brushSize * 2] }),
     drawOptions: { fill: true, stroke: true }
   }),
 
@@ -47,9 +47,9 @@ const brushes = {
       fillStyle: '#999',
       strokeStyle: '#333',
     },
-    drawFunc: e => ([
-      { func: 'rect', args: [e.offsetX, e.offsetY, 5, 5]},
-      { func: 'rect', args: [e.offsetY, e.offsetX, 5, 5]},
+    drawFunc: (e, brushSize) => ([
+      { func: 'rect', args: [e.offsetX, e.offsetY, brushSize, brushSize]},
+      { func: 'rect', args: [e.offsetY, e.offsetX, brushSize, brushSize]},
     ]),
     drawOptions: {
       fill: true,
@@ -62,8 +62,8 @@ const brushes = {
       fillStyle: '#6694',
       strokeStyle: 'lime',
     },
-    drawFunc: e => ([
-      { func: 'rect', args: [e.offsetX / 1.5, e.offsetY * 1.5, 5, 5] }
+    drawFunc: (e, brushSize) => ([
+      { func: 'rect', args: [e.offsetX / 1.5, e.offsetY * 1.5, brushSize, brushSize] }
     ]),
     drawOptions: {
       fill: true,

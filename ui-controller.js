@@ -1,10 +1,12 @@
 
 let selectedBrush = brushes.default;
 
+let brushSize = 5;
+const brushSizeLabelDisplay = () => `Brush size: ${brushSize} `;
+
 const canvas = new canvasManager.Canvas('#canvas');
 canvas.width = 700;
 canvas.height = 700;
-
 
 canvas.on('mousedown', mdE => {
   canvas.createPath(selectedBrush);
@@ -13,10 +15,10 @@ canvas.on('mousedown', mdE => {
     canvas.ctx[key] = value;
   });
 
-  canvas.draw(() => selectedBrush.drawFunc(mdE));
+  canvas.draw(() => selectedBrush.drawFunc(mdE, brushSize));
 
   canvas.on('mousemove', mmE => {
-    canvas.draw(() => selectedBrush.drawFunc(mmE));
+    canvas.draw(() => selectedBrush.drawFunc(mmE, brushSize));
   });
 });
 
@@ -79,7 +81,18 @@ function renderSidebar() {
           } 
         }, 
         [
-
+          c('label', { attrs: { id: 'range-label' }}, [brushSizeLabelDisplay()]),
+          c('input',
+            {
+              attrs: { type: 'range', min: 1, max: 20, value: brushSize },
+              on: { 
+                input: e => {
+                  brushSize = e.target.value;
+                  document.getElementById('range-label').textContent = brushSizeLabelDisplay();
+                }
+              }
+            }
+          )
         ]
       )
     ))
@@ -89,3 +102,4 @@ function renderSidebar() {
 
 renderToolbar();
 renderSidebar();
+
