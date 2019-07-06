@@ -13,7 +13,7 @@
 
 class Brush {
   /** @param {BrushConfig} */
-  constructor({ ctxConfig, drawFunc, drawOptions }) {
+  constructor({ ctxConfig, drawFunc, drawOptions } = {}) {
     this.ctxConfig = ctxConfig;
     this.drawFunc = drawFunc;
     this.drawOptions = drawOptions
