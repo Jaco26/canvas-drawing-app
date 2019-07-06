@@ -27,29 +27,37 @@ let brushVariants = [
     drawFunc: (e, config) => {
       const width = config.brushSize * config.xModifier;
       const height = config.brushSize * config.yModifier;
-      return {
-        func: 'rect',
-        args: [
-          e.offsetX - (width / 2),
-          e.offsetY - (height / 2),
-          width,
-          height,
-        ]
+      const ret = [
+        { func: 'rect',
+          args: [e.offsetX - (width / 2), e.offsetY - (height / 2), width,height]
+        }
+      ]
+      if (config.mirror) {
+        ret.push({
+          func: 'rect',
+          args: [e.offsetY - (width / 2), e.offsetX - (height / 2), width,height]
+        })
       }
+      return ret;
     },
   },
   {
     text: 'Arc',
-    drawFunc: (e, config) => ({
-      func: 'arc',
-      args: [
-        e.offsetX,
-        e.offsetY,
-        config.brushSize * config.rModifier,
-        0,
-        Math.PI * 2
-      ]
-    })
+    drawFunc: (e, config) => {
+      const ret = [
+        { 
+          func: 'arc', 
+          args: [e.offsetX, e.offsetY, config.brushSize * config.rModifier, 0, Math.PI * 2] 
+        },
+      ];
+      if (config.mirror) {
+        ret.push({
+          func: 'arc',
+          args: [e.offsetY, e.offsetX, config.brushSize * config.rModifier, 0, Math.PI * 2],
+        })
+      }
+      return ret;
+    }
   },
 ];
 
@@ -71,14 +79,15 @@ function createBrushConfig(config) {
 }
 
 const config = createBrushConfig({
-  brushSize: 10,
-  xModifier: 2,
-  yModifier: 2,
+  brushSize: 5,
+  xModifier: 4,
+  yModifier: 4,
   rModifier: 2,
   fillStyle: '#fff',
   strokeStyle: '#000',
   shouldFill: true,
   shouldStroke: true,
+  mirror: false,
   brushVariant: brushVariants[0],
 });
 

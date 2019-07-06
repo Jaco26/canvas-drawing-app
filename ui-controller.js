@@ -93,6 +93,18 @@ function renderSidebar() {
               on: { input: e => config.strokeStyle = e.target.value }
             }
           ),
+          c('div',
+            { style: { margin: '1.2rem 0' }},
+            [
+              c('label', { attrs: { for: 'mirror-toggle'}}, ['Mirror Mode: ']),
+              c('input',
+                { 
+                  attrs: { type: 'checkbox', id: 'mirror-toggle'},
+                  on: { input: () => config.mirror = !config.mirror }
+                }
+              )
+            ]
+          )
         ]
       )
     ))
