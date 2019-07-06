@@ -33,7 +33,6 @@ let brushVariants = [
   },
 ];
 
-// let selectedBrushVariant = brushVariants[0];
 
 function createBrushConfig(config) {
   return Object.keys(config).reduce((acc, key) => {
@@ -118,29 +117,13 @@ function renderToolbar() {
         [
           c('h1', { style: { margin: 0, padding: 0 }}, ['Drawing Is Fun!']),
           c('div', { style: { margin: 'auto'}}, ['']),
-          c('div', { style: { margin: '0 5px' }}, ['Select a brush']),
-          c('select',
-            {
-              on: { change: e => selectedBrush = brushes[e.target.value] },
-            },
-            Object.keys(brushes).map(key => {
-              return c('option', 
-                { 
-                  attrs: { 
-                    value: key
-                  },
-                },
-                [key]
-              )
-            })
-          ),
           c('button', 
             {
-              style: { margin: '0 5px' },
+              style: { margin: '0 5px', height: '30px', width: '90px', fontSize: '1rem' },
               on: { click: () => canvas.popPath() }
             },
             ['Undo']
-          )
+          ),
         ]
       ) 
     ));
@@ -167,28 +150,30 @@ function renderSidebar() {
               }
             }
           ),
-          c('br'),
-          c('br'),
+          c('br'),c('br'),
+          c('label', ['Brush variant: ']),
+          c('select',
+            { 
+              on: { change: e => config.brushVariant = brushVariants[e.target.value] }
+            },
+            brushVariants.map((x, i) => c('option', { attrs: { value: i }}, [x.text]))
+          ),
+          c('br'),c('br'),
           c('label', ['Fill Style: ']),
           c('input',
             { 
-              attrs: { type: 'color', value: '#aaa' }, 
-              on: {
-                input: e => config.fillStyle = e.target.value,
-              }
+              attrs: { type: 'color', value: '#fff' }, 
+              on: { input: e => config.fillStyle = e.target.value }
             }
           ),
-          c('br'),
-          c('br'),
+          c('br'),c('br'),
           c('label', ['Stroke Style: ']),
           c('input',
             {
-              attrs: { type: 'color', value: '#aaa' }, 
-              on: {
-                input: e => config.strokeStyle = e.target.value,
-              }
+              attrs: { type: 'color', value: '#fff' }, 
+              on: { input: e => config.strokeStyle = e.target.value }
             }
-          )
+          ),
         ]
       )
     ))
