@@ -8,32 +8,42 @@ const ctxOptions = {
   fillStyle: 'blue',
 }
 
+const drawOptions = {
+  brushSize: 10,
+  xMod: 2,
+  yMod: 2,
+  rMod: 1,
+}
+
+function func(func, ...args) {
+  return { func, args };
+}
+
 const brushes = {
-  line: createBrush({
-    onMousedown({ evt, ctx, currentPath }) {
-      ctx.beginPath();
-      ctx.moveTo(evt.offsetX, evt.offsetY);
-    },
-    onMousemove({ evt, ctx, currentPath }) {
-      ctx.lineTo(evt.offsetX, evt.offsetY);
-    },
-    onMouseup({ evt, ctx, currentPath }) {
-      ctx.closePath();
-    }
-  }),
+  line: {
+    onMousedown: e => ([
+      func('beginPath'),
+      func('moveTo', e.offsetX, e.offsetY),
+    ]),
+    onMousemove: e => ([
+      func('lineTo', e.offsetX, e.offsetY)
+    ]),
+    onMouseup: e => ([
+      func('closePath'),
+    ])
+  },
   rect: createBrush({
-    onMousemove({ evt, ctx }) {
-      ctx.beginPath();
-      ctx.rect(evt.offsetX, evt.offsetY, 10, 10);
-      ctx.closePath();
-    },
+    onMousemove: (e, config) => ([
+      func('beginPath'),
+      func('rect', e.offsetX, e.offsetY, config.brushSize * config.xMod, config.brushSize * config.yMod)
+    ]),
   }),
   arc: createBrush({
-    onMousemove({ evt, ctx }) {
-      ctx.beginPath()
-      ctx.arc(evt.offsetX, evt.offsetY, 10, 0, Math.PI * 2);
-      ctx.closePath();
-    }
+    onMousemove: (e, config) => ([
+      func('beginPath'),
+      func('arc', e.offsetX, e.offsetY, config.brushSize * config.rMod, 0, Math.PI * 2),
+      func('closePath'),
+    ]),
   }),
 }
 
@@ -42,9 +52,10 @@ const app = createApp({
   width: 700,
   height: 700,
   ctxOptions,
+  drawOptions,
 });
 
-app.setBrush(brushes.arc)
+app.setBrush(brushes.line)
 
 function renderToolbar() {
   render('#toolbar', c => (

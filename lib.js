@@ -13,7 +13,11 @@ const DrawingApp = (function() {
      * @param {PathConfig} config 
      */
     constructor(config) {
-      this.directives = [];
+      this.directives = {
+        mousedown: [],
+        mousemove: [],
+        mouseup: [],
+      };
       this.config = config
     }
   }
@@ -88,28 +92,29 @@ const DrawingApp = (function() {
   }
 
   /**
-   * 
-   * @typedef BrushCallback
-   * @property {MouseEvent} evt
-   * @property {CanvasRenderingContext2D} ctx
-   * @property {Path} currentPath
-   */
-
-  /**
    * @typedef Brush
-   * @property {function(BrushCallback)} onMousedown
-   * @property {function(BrushCallback)} onMousemove
-   * @property {function(BrushCallback)} onMouseup
+   * @property {function(MouseEvent)} onMousedown
+   * @property {function(MouseEvent)} onMousemove
+   * @property {function(MouseEvent)} onMouseup
   */
 
   /** @param {Brush} config */
   function createBrush(config) {
     return {
-      onMousedown: config.onMousedown ? config.onMousedown : () => null,
-      onMousemove: config.onMousemove ? config.onMousemove : () => null,
-      onMouseup: config.onMouseup ? config.onMouseup : () => null,
+      onMousedown: config.onMousedown ? config.onMousedown : () => [],
+      onMousemove: config.onMousemove ? config.onMousemove : () => [],
+      onMouseup: config.onMouseup ? config.onMouseup : () => [],
     }
   }
+
+  /**
+   * 
+   * @typedef drawOptions
+   * @property {number} brushSize
+   * @property {number} xMod
+   * @property {number} yMod
+   * @property {number} rMod
+   */
 
   /**
    * 
@@ -117,7 +122,8 @@ const DrawingApp = (function() {
    *  selector: string,
    *  width: number,
    *  height: number,
-   *  pathCtxOptions: Object<string, boolean | string>
+   *  ctxOptions: Object<string, boolean | string>
+   *  drawOptions: Object<string, string | number>
    * }} config
    */
   function createApp(config) {
@@ -128,24 +134,22 @@ const DrawingApp = (function() {
     let selectedBrush = null;
 
     canvas.on('mousedown', e => {
-      pathManager.createPath(config.ctxOptions);
+      pathManager.createPath({ ...config.ctxOptions });
 
       const { strokeStyle, fillStyle } = pathManager.currentPath.config;
       canvas.ctx.strokeStyle = strokeStyle;
       canvas.ctx.fillStyle = fillStyle;
-    
-      selectedBrush.onMousedown({
-        evt: e,
-        ctx: canvas.ctx, 
-        currentPath: pathManager.currentPath
-      });
+      
+      selectedBrush.onMousedown(e).forEach(directive => {
+        canvas.ctx[directive.func](...directive.args);
+        pathManager.currentPath.directives.mousedown.push(directive);
+      })
     
       canvas.on('mousemove', e => {
-        selectedBrush.onMousemove({
-          evt: e,
-          ctx: canvas.ctx, 
-          currentPath: pathManager.currentPath,
-        });
+        selectedBrush.onMousemove(e, config.drawOptions).forEach(directive => {
+          canvas.ctx[directive.func](...directive.args);
+          pathManager.currentPath.directives.mousemove.push(directive);
+        })
         if (pathManager.currentPath.config.fill) canvas.ctx.fill();
         if (pathManager.currentPath.config.stroke) canvas.ctx.stroke();
       });
@@ -153,11 +157,10 @@ const DrawingApp = (function() {
     
     canvas.on('mouseup', e => {
       canvas.off('mousemove');
-      selectedBrush.onMouseup({
-        evt: e,
-        ctx: canvas.ctx,
-        currentPath: pathManager.currentPath,
-      });
+      selectedBrush.onMouseup(e).forEach(directive => {
+        canvas.ctx[directive.func](...directive.args);
+        pathManager.currentPath.directives.mouseup.push(directive);
+      })
       pathManager.endPath();
     });
 
@@ -166,10 +169,24 @@ const DrawingApp = (function() {
     }
 
     function undo() {
-      console.log('undoing!')
+      canvas.clear();
+      pathManager.popPath();
+      pathManager.history.forEach(path => {
+        path.directives.mousedown.forEach(directive => {
+          canvas.ctx[directive.func](...directive.args);
+        });
+        path.directives.mousemove.forEach(directive => {
+          canvas.ctx[directive.func](...directive.args);
+          if (path.config.fill) canvas.ctx.fill();
+          if (path.config.stroke) canvas.ctx.stroke();
+        });
+        path.directives.mouseup.forEach(directive => {
+          canvas.ctx[directive.func](...directive.args);
+        });
+      })
     }
 
-    return { setBrush, undo };
+    return { pathManager, setBrush, undo };
   }
 
   return {
