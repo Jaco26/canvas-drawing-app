@@ -1,24 +1,24 @@
 
-/**
- * @typedef BrushConfig
- * @property {Object<string, string|number>} ctxConfig key value pairs used to configure a CanvasRenderingContext2D object
- * @property {(e: MouseEvent) => { func: string, args: Array<string|number>} | { func: string, args: Array<string|number>}[]} drawFunc a callback that recieves a MouseEvent as
- * its arguement and returns an object with:
- * - `func`: the name of a CanvasRenderingContext2D method and,
- * - `args`: the arguments to be passed to that method
- * 
- * @property {Object<string, boolean>} drawOptions key value pairs used to configure which render functions should be called
- * on a CanvasRenderingContext2D object (e.g. `{ fill: true, stroke: false }`)
-*/
+// /**
+//  * @typedef BrushConfig
+//  * @property {Object<string, string|number>} ctxConfig key value pairs used to configure a CanvasRenderingContext2D object
+//  * @property {(e: MouseEvent) => { func: string, args: Array<string|number>} | { func: string, args: Array<string|number>}[]} drawFunc a callback that recieves a MouseEvent as
+//  * its arguement and returns an object with:
+//  * - `func`: the name of a CanvasRenderingContext2D method and,
+//  * - `args`: the arguments to be passed to that method
+//  * 
+//  * @property {Object<string, boolean>} drawOptions key value pairs used to configure which render functions should be called
+//  * on a CanvasRenderingContext2D object (e.g. `{ fill: true, stroke: false }`)
+// */
 
-class Brush {
-  /** @param {BrushConfig} */
-  constructor({ ctxConfig, drawFunc, drawOptions } = {}) {
-    this.ctxConfig = ctxConfig;
-    this.drawFunc = drawFunc;
-    this.drawOptions = drawOptions
-  }
-}
+// class Brush {
+//   /** @param {BrushConfig} */
+//   constructor({ ctxConfig, drawFunc, drawOptions } = {}) {
+//     this.ctxConfig = ctxConfig;
+//     this.drawFunc = drawFunc;
+//     this.drawOptions = drawOptions
+//   }
+// }
 
 
 let brushVariants = [

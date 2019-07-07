@@ -80,14 +80,9 @@ const canvasManager = (function() {
       /** @type {Directive[]} */
       const newDirectives = [];
       if (Array.isArray(config)) {
-        if (typeof config[0] === 'string') {
-          const [func, args] = config;
-          newDirectives.push(new Directive(func, args));
-        } else {
-          config.forEach(item => {
-            newDirectives.push(new Directive(item.func, item.args))
-          });
-        }
+        config.forEach(item => {
+          newDirectives.push(new Directive(item.func, item.args))
+        });
       } else if (config && typeof config === 'object') {
         newDirectives.push(new Directive(config.func, config.args))
       }
