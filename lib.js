@@ -149,9 +149,9 @@ const DrawingApp = (function() {
         selectedBrush.onMousemove(e, config.drawOptions).forEach(directive => {
           canvas.ctx[directive.func](...directive.args);
           pathManager.currentPath.directives.mousemove.push(directive);
+          if (pathManager.currentPath.config.fill) canvas.ctx.fill();
+          if (pathManager.currentPath.config.stroke) canvas.ctx.stroke();
         })
-        if (pathManager.currentPath.config.fill) canvas.ctx.fill();
-        if (pathManager.currentPath.config.stroke) canvas.ctx.stroke();
       });
     });
     
@@ -172,6 +172,8 @@ const DrawingApp = (function() {
       canvas.clear();
       pathManager.popPath();
       pathManager.history.forEach(path => {
+        canvas.ctx.fillStyle = path.config.fillStyle;
+        canvas.ctx.strokeStyle = path.config.strokeStyle;
         path.directives.mousedown.forEach(directive => {
           canvas.ctx[directive.func](...directive.args);
         });
