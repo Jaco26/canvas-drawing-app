@@ -1,4 +1,5 @@
 const { createApp, createBrush } = DrawingApp;
+const { render, createElement } = ThanksBeToVue;
 
 const ctxOptions = {
   fill: false,
@@ -45,4 +46,23 @@ const app = createApp({
 
 app.setBrush(brushes.arc)
 
+function renderToolbar() {
+  render('#toolbar', c => (
+    c('div',
+      { style: { padding: '0.5rem', display: 'flex', alignItems: 'center' }},
+      [
+        c('h1', { style: { padding: 0, margin: 0}}, ['DRAW!']),
+        c('div', { style: { margin: 'auto'}}),
+        c('button',
+          {
+            style: { margin: '0 5px', height: '30px', width: '90px', fontSize: '1rem' },
+            on: { click: () => app.undo() }
+          },
+          ['Undo']
+        ),
+      ]
+    )
+  ))
+}
 
+renderToolbar()

@@ -102,6 +102,15 @@ const DrawingApp = (function() {
    * @property {function(BrushCallback)} onMouseup
   */
 
+  /** @param {Brush} config */
+  function createBrush(config) {
+    return {
+      onMousedown: config.onMousedown ? config.onMousedown : () => null,
+      onMousemove: config.onMousemove ? config.onMousemove : () => null,
+      onMouseup: config.onMouseup ? config.onMouseup : () => null,
+    }
+  }
+
   /**
    * 
    * @param {{
@@ -146,7 +155,7 @@ const DrawingApp = (function() {
       canvas.off('mousemove');
       selectedBrush.onMouseup({
         evt: e,
-        ctx: canvas.ctx, 
+        ctx: canvas.ctx,
         currentPath: pathManager.currentPath,
       });
       pathManager.endPath();
@@ -156,17 +165,11 @@ const DrawingApp = (function() {
       selectedBrush = brush;
     }
 
-    return { setBrush };
-  }
-
-
-  /** @param {Brush} config */
-  function createBrush(config) {
-    return {
-      onMousedown: config.onMousedown ? config.onMousedown : () => null,
-      onMousemove: config.onMousemove ? config.onMousemove : () => null,
-      onMouseup: config.onMouseup ? config.onMouseup : () => null,
+    function undo() {
+      console.log('undoing!')
     }
+
+    return { setBrush, undo };
   }
 
   return {
