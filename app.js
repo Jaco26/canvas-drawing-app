@@ -22,6 +22,21 @@ function func(func, ...args) {
 
 const brushes = {
   arc: createBrush({
+    onMousedown: (e, config) => {
+      const ret = [
+        func('beginPath'),
+        func('arc', e.offsetX, e.offsetY, config.brushSize * config.rMod, 0, Math.PI * 2),
+        func('closePath'),
+      ];
+      if (config.mirror) {
+        ret.push(
+          func('beginPath'),
+          func('arc', e.offsetY, e.offsetX, config.brushSize * config.rMod, 0, Math.PI * 2),
+          func('closePath'),
+        );
+      }
+      return ret;
+    },
     onMousemove: (e, config) => {
       const ret = [
         func('beginPath'),
@@ -39,14 +54,35 @@ const brushes = {
     }
   }),
   rect: createBrush({
-    onMousemove: (e, config) => {
+    onMousedown: (e, config) => {
+      const width = config.brushSize * config.xMod;
+      const height = config.brushSize * config.yMod;
+      const x = e.offsetX - (width / 2);
+      const y = e.offsetY - (height / 2);
       const ret = [
         func('beginPath'),
-        func('rect', e.offsetX, e.offsetY, config.brushSize * config.xMod, config.brushSize * config.yMod)
+        func('rect', x, y, width, height)
       ];
       if (config.mirror) {
         ret.push(
-          func('rect', e.offsetY, e.offsetX, config.brushSize * config.xMod, config.brushSize * config.yMod)
+          func('rect', x, y, width, height)
+        );
+      }
+      ret.push(func('closePath'));
+      return ret;
+    },
+    onMousemove: (e, config) => {
+      const width = config.brushSize * config.xMod;
+      const height = config.brushSize * config.yMod;
+      const x = e.offsetX - (width / 2);
+      const y = e.offsetY - (height / 2);
+      const ret = [
+        func('beginPath'),
+        func('rect', x, y, width, height)
+      ];
+      if (config.mirror) {
+        ret.push(
+          func('rect', x, y, width, height)
         );
       }
       ret.push(func('closePath'));
@@ -84,7 +120,7 @@ function renderToolbar() {
     c('div',
       { style: { padding: '0.5rem', display: 'flex', alignItems: 'center' }},
       [
-        c('h1', { style: { padding: 0, margin: 0}}, ['DRAW!']),
+        c('h1', { style: { padding: 0, margin: 0, fontWeight: 400 }}, ['Hey Neat!']),
         c('div', { style: { margin: 'auto'}}),
         c('button',
           {
@@ -152,7 +188,19 @@ function renderSidebar() {
         c('div',
           { style: { margin: '0.6rem 0' }},
           [
-            c('label', ['Fill Style: ']),
+            c('label', ['Background color: ']),
+            c('input',
+              { 
+                attrs: { type: 'color', value: '#ffffff' }, 
+                on: { input: e => app.setBackground(e.target.value) }
+              }
+            ),
+          ]
+        ),
+        c('div',
+          { style: { margin: '0.6rem 0' }},
+          [
+            c('label', ['Fill style: ']),
             c('input',
               { 
                 attrs: { type: 'color', value: ctxOptions.fillStyle }, 
@@ -164,7 +212,7 @@ function renderSidebar() {
         c('div',
           { style: { margin: '0.6rem 0' }},
           [
-            c('label', ['Stroke Style: ']),
+            c('label', ['Stroke style: ']),
             c('input',
               { 
                 attrs: { type: 'color', value: ctxOptions.strokeStyle }, 

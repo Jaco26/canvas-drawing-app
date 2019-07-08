@@ -132,6 +132,7 @@ const DrawingApp = (function() {
     canvas.height = config.height;
     const pathManager = new PathManager();
     let selectedBrush = null;
+    let backgroundColor = null;
 
     canvas.on('mousedown', e => {
       pathManager.createPath({ ...config.ctxOptions });
@@ -140,9 +141,11 @@ const DrawingApp = (function() {
       canvas.ctx.strokeStyle = strokeStyle;
       canvas.ctx.fillStyle = fillStyle;
       
-      selectedBrush.onMousedown(e).forEach(directive => {
+      selectedBrush.onMousedown(e, config.drawOptions).forEach(directive => {
         canvas.ctx[directive.func](...directive.args);
         pathManager.currentPath.directives.mousedown.push(directive);
+        if (pathManager.currentPath.config.fill) canvas.ctx.fill();
+        if (pathManager.currentPath.config.stroke) canvas.ctx.stroke();
       })
     
       canvas.on('mousemove', e => {
@@ -164,13 +167,11 @@ const DrawingApp = (function() {
       pathManager.endPath();
     });
 
-    function setBrush(brush) {
-      selectedBrush = brush;
-    }
-
-    function undo() {
-      canvas.clear();
-      pathManager.popPath();
+    function redrawHistory() {
+      if (backgroundColor) {
+        canvas.ctx.fillStyle = backgroundColor;
+        canvas.ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
       pathManager.history.forEach(path => {
         canvas.ctx.fillStyle = path.config.fillStyle;
         canvas.ctx.strokeStyle = path.config.strokeStyle;
@@ -188,7 +189,22 @@ const DrawingApp = (function() {
       })
     }
 
-    return { pathManager, setBrush, undo };
+    function setBackground(color) {
+      backgroundColor = color;
+      redrawHistory();
+    }
+
+    function setBrush(brush) {
+      selectedBrush = brush;
+    }
+
+    function undo() {
+      canvas.clear();
+      pathManager.popPath();
+      redrawHistory();
+    }
+
+    return { setBackground, pathManager, setBrush, undo };
   }
 
   return {
