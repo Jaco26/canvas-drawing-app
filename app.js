@@ -65,7 +65,7 @@ const brushes = {
       ];
       if (config.mirror) {
         ret.push(
-          func('rect', x, y, width, height)
+          func('rect', y, x, width, height)
         );
       }
       ret.push(func('closePath'));
@@ -82,7 +82,7 @@ const brushes = {
       ];
       if (config.mirror) {
         ret.push(
-          func('rect', x, y, width, height)
+          func('rect', y, x, width, height)
         );
       }
       ret.push(func('closePath'));
