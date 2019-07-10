@@ -129,6 +129,24 @@ function renderToolbar() {
           },
           ['Undo']
         ),
+        c('button',
+          {
+            style: { margin: '0 5px', height: '30px', fontSize: '1rem' },
+          },
+          [
+            c('a',
+              {
+                attrs: { download: 'my-drawing.png', href: app.canvasToDataUrl('image/png') },
+                on: { 
+                  click: function() {
+                    this.href = app.canvasToDataUrl('image/png');
+                  }
+                }
+              },
+              ['Save your work']
+            )
+          ]
+        )
       ]
     )
   ))

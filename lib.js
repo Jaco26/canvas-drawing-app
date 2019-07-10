@@ -204,7 +204,13 @@ const DrawingApp = (function() {
       redrawHistory();
     }
 
-    return { setBackground, pathManager, setBrush, undo };
+    function canvasToDataUrl(type) {
+      return canvas.canvas.toDataURL(type);
+    }
+
+    
+
+    return { setBackground, pathManager, setBrush, undo, canvasToDataUrl };
   }
 
   return {

@@ -88,15 +88,3 @@ const ThanksBeToVue = (function() {
   return { render, createElement };
 
 })();
-
-// /** @param {function(createElement)} callback */
-// function renderCard(callback) {
-//   return createElement('div',
-//     {
-//       style: { padding: '0.5rem' },
-//     },
-//     [
-//       callback(createElement)
-//     ]
-//   );
-// }
