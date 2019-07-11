@@ -203,42 +203,27 @@ function renderSidebar() {
             ),
           ]
         ),
-        c('div',
-          { style: { margin: '0.6rem 0' }},
-          [
-            c('label', ['Background color: ']),
-            c('input',
-              { 
-                attrs: { type: 'color', value: '#ffffff' }, 
-                on: { input: e => app.setBackground(e.target.value) }
-              }
-            ),
-          ]
-        ),
-        c('div',
-          { style: { margin: '0.6rem 0' }},
-          [
-            c('label', ['Fill style: ']),
-            c('input',
-              { 
-                attrs: { type: 'color', value: ctxOptions.fillStyle }, 
-                on: { input: e => ctxOptions.fillStyle = e.target.value }
-              }
-            ),
-          ]
-        ),
-        c('div',
-          { style: { margin: '0.6rem 0' }},
-          [
-            c('label', ['Stroke style: ']),
-            c('input',
-              { 
-                attrs: { type: 'color', value: ctxOptions.strokeStyle }, 
-                on: { input: e => ctxOptions.strokeStyle = e.target.value }
-              }
-            ),
-          ]
-        ),
+        createInput({
+          labelText: 'Background color: ',
+          id: 'background-color-input',
+          type: 'color',
+          value: '#ffffff',
+          onInput: e => app.setBackground(e.target.value),
+        }),
+        createInput({
+          labelText: 'Fill style: ',
+          id: 'fill-style-input',
+          type: 'color',
+          value: ctxOptions.fillStyle,
+          onInput: e => ctxOptions.fillStyle = e.target.value,
+        }),
+        createInput({
+          labelText: 'Stroke style: ',
+          id: 'stroke-style-input',
+          type: 'color',
+          value: ctxOptions.strokeStyle,
+          onInput: e => ctxOptions.strokeStyle = e.target.value
+        }),
         c('ul',
           { style: { listStyle: 'none', margin: '0.6rem 0', padding: 0 }},
           [

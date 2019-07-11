@@ -177,6 +177,8 @@ const DrawingApp = (function() {
         canvas.ctx.strokeStyle = path.config.strokeStyle;
         path.directives.mousedown.forEach(directive => {
           canvas.ctx[directive.func](...directive.args);
+          if (path.config.fill) canvas.ctx.fill();
+          if (path.config.stroke) canvas.ctx.stroke();
         });
         path.directives.mousemove.forEach(directive => {
           canvas.ctx[directive.func](...directive.args);
